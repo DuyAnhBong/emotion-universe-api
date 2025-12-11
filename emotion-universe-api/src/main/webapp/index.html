@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Universe API</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+        }
+        h1 { color: #FFD700; }
+        .endpoint {
+            background: #1a1a1a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #FFD700;
+        }
+        code {
+            background: #2a2a2a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #87CEEB;
+        }
+        a {
+            color: #87CEEB;
+            text-decoration: none;
+        }
+        a:hover { text-decoration: underline; }
+        #status { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🌟 Emotion Universe API</h1>
+    <p>Backend API for Emotion Universe - 感情宇宙</p>
+    
+    <h2>📡 API Endpoint:</h2>
+    
+    <div class="endpoint">
+        <h3>GET <code>/api/all</code></h3>
+        <p>Get all emotions and nebulas in one request</p>
+        <a href="/api/all" target="_blank">Test Endpoint →</a>
+    </div>
+    
+    <h2>📊 Database:</h2>
+    <ul>
+        <li>✅ Emotions: 23 entries</li>
+        <li>✅ Nebulas: 6 entries</li>
+        <li>✅ Cloudinary images</li>
+    </ul>
+    
+    <h2>🚀 Status:</h2>
+    <div id="status">Checking connection...</div>
+    
+    <script>
+        fetch('/api/all')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('status').innerHTML = 
+                        '✅ <strong>API Running!</strong><br>' +
+                        'Emotions: ' + data.data.emotions.length + '<br>' +
+                        'Nebulas: ' + data.data.nebulas.length;
+                } else {
+                    document.getElementById('status').innerHTML = '❌ API Error';
+                }
+            })
+            .catch(e => {
+                document.getElementById('status').innerHTML = '⏳ Waiting for deployment...';
+            });
+    </script>
+</body>
+</html>

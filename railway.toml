@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+buildCommand = "mvn clean package -DskipTests"
+
+[deploy]
+startCommand = "java -jar target/emotion-universe-api.jar"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10

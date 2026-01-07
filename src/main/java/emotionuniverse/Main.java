@@ -2,12 +2,13 @@ package emotionuniverse;
 
 import java.io.File;
 
+import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.WebResourceRoot;
-import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
-import org.apache.catalina.webresources.DirResourceSet;
-import org.apache.catalina.webresources.StandardRoot;
+import org.apache.tomcat.util.descriptor.web.FilterDef;
+import org.apache.tomcat.util.descriptor.web.FilterMap;
+
+import emotionuniverse.servlet.GetAllDataServlet;
 
 /**
  * Main class with embedded Tomcat
@@ -36,19 +37,15 @@ public class Main {
         tomcat.setBaseDir(baseDir);
         
         // Add webapp context
-        StandardContext ctx = (StandardContext) tomcat.addContext("", baseDir);
+        Context ctx = tomcat.addContext("", baseDir);
         
-        // Enable annotation scanning for @WebServlet
-        ctx.addLifecycleListener(new Tomcat.FixContextListener());
+        // PROGRAMMATICALLY register servlet
+        System.out.println("📝 Registering servlet: GetAllDataServlet at /api/all");
+        Tomcat.addServlet(ctx, "GetAllDataServlet", new GetAllDataServlet());
+        ctx.addServletMappingDecoded("/api/all", "GetAllDataServlet");
         
-        // Add current directory as resource base
-        File additionWebInfClasses = new File("target/classes");
-        WebResourceRoot resources = new StandardRoot(ctx);
-        resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",
-                additionWebInfClasses.getAbsolutePath(), "/"));
-        ctx.setResources(resources);
-        
-        System.out.println("Context configured");
+        System.out.println("✅ Servlet registered successfully!");
+        System.out.println("Context path: " + ctx.getPath());
         System.out.println("Base directory: " + baseDir);
         System.out.println("===========================================");
         
@@ -56,7 +53,7 @@ public class Main {
         tomcat.start();
         System.out.println("✅ Server started successfully!");
         System.out.println("📍 Listening on port: " + port);
-        System.out.println("🔗 Servlets should be available at /api/*");
+        System.out.println("🔗 API available at: /api/all");
         System.out.println("===========================================");
         
         // Wait for shutdown
